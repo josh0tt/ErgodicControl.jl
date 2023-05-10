@@ -6,11 +6,13 @@ export ConstantInitializer
 export RandomInitializer
 export SampleInitializer
 export CornerInitializer
+export BoundaryInitializer
 
 include("constant_initializer.jl")
 include("random_initializer.jl")
 include("sample_initializer.jl")
 include("corner_initializer.jl")
+include("boundary_initializer.jl")
 
 
 """
