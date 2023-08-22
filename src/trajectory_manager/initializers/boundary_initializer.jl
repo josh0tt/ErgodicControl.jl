@@ -38,32 +38,70 @@ function outward_normal(points, query_point)
         prev_point = points[query_idx-1]
     end
 
-    # Compute the vectors from the query point to the adjacent points
-    vector_from_prev = abs.(closest_point - prev_point)
-    vector_from_next = abs.(closest_point - next_point)
-
-    # Compute the outward normal by averaging the vectors and rotating by 90 degrees
-    outward_normal = (vector_from_prev + vector_from_next) / 2
-
-    # Normalize the outward normal
-    outward_normal /= norm(outward_normal)
-
     xmin = minimum([p[1] for p in points])
     xmax = maximum([p[1] for p in points])
     ymin = minimum([p[2] for p in points])
     ymax = maximum([p[2] for p in points])
 
-    x_sign = 1
-    if query_point[1] == xmin
-        x_sign = -1
+    if closest_point[1] == xmin && closest_point[2] == ymin
+        # corner point
+        return [-1, -1]
+    elseif closest_point[1] == xmin && closest_point[2] == ymax
+        # corner point
+        return [-1, 1]
+    elseif closest_point[1] == xmax && closest_point[2] == ymin
+        # corner point
+        return [1, -1]
+    elseif closest_point[1] == xmax && closest_point[2] == ymax
+        # corner point
+        return [1, 1]
+    elseif closest_point[1] == xmin
+        # left edge
+        return [-1, 0]
+    elseif closest_point[1] == xmax
+        # right edge
+        return [1, 0]
+    elseif closest_point[2] == ymin
+        # bottom edge
+        return [0, -1]
+    elseif closest_point[2] == ymax
+        # top edge
+        return [0, 1]
+    else
+        # interior point
+        return [0, 0]
     end
+    # # Compute the vectors from the query point to the adjacent points
+    # vector_from_prev = closest_point - prev_point
+    # vector_from_next = closest_point - next_point
 
-    y_sign = 1
-    if query_point[2] == ymin
-        y_sign = -1
-    end
+    # # Compute the outward normal by averaging the vectors and rotating by 90 degrees
+    # outward_normal = (vector_from_prev + vector_from_next) / 2
 
-    return [x_sign*outward_normal[2], y_sign*outward_normal[1]]
+    # # Normalize the outward normal
+    # outward_normal /= norm(outward_normal)
+
+    # xmin = minimum([p[1] for p in points])
+    # xmax = maximum([p[1] for p in points])
+    # ymin = minimum([p[2] for p in points])
+    # ymax = maximum([p[2] for p in points])
+
+    # x_sign = 1
+    # if closest_point[1] == xmin && closest_point[2] != ymin && closest_point[2] != ymax
+    #     x_sign = -1
+    # end
+
+    # y_sign = 1
+    # if closest_point[2] == ymin && closest_point[1] != xmin && closest_point[2] != xmax
+    #     y_sign = -1
+    # end
+    
+    # if (closest_point[1] == xmin && closest_point[2] == ymin) || (closest_point[1] == xmin && closest_point[2] == ymax) || (closest_point[1] == xmax && closest_point[2] == ymin) || (closest_point[1] == xmax && closest_point[2] == ymin)
+    #     # corner point
+    #     return [x_sign*outward_normal[1], y_sign*outward_normal[2]]
+    # else
+    #     return [x_sign*outward_normal[2], y_sign*outward_normal[1]]
+    # end
 end
 
 
